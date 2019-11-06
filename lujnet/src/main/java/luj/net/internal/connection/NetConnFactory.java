@@ -13,10 +13,12 @@ import luj.net.api.data.NetReceiveListener;
 
 public class NetConnFactory {
 
-  public NetConnFactory(String host, int port, NetReceiveListener receiveListener) {
+  public NetConnFactory(String host, int port,
+      Object appParam, NetReceiveListener receiveListener) {
     _host = host;
     _port = port;
 
+    _appParam = appParam;
     _receiveListener = receiveListener;
   }
 
@@ -32,7 +34,7 @@ public class NetConnFactory {
       @Override
       protected void initChannel(SocketChannel ch) {
         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4));
-        ch.pipeline().addLast(new NettyClientHandler(_receiveListener));
+        ch.pipeline().addLast(new NettyClientHandler(_appParam, _receiveListener));
       }
     });
 
@@ -48,5 +50,6 @@ public class NetConnFactory {
   private final String _host;
   private final int _port;
 
+  private final Object _appParam;
   private final NetReceiveListener _receiveListener;
 }

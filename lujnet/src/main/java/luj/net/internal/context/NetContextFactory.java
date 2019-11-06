@@ -8,8 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 public class NetContextFactory {
 
-  public NetContextFactory(ApplicationContext appContext) {
+  public NetContextFactory(ApplicationContext appContext, Object appParam) {
     _appContext = appContext;
+    _appParam = appParam;
   }
 
   public NetContext create() {
@@ -20,7 +21,7 @@ public class NetContextFactory {
       ctx.refresh();
 
       InjectRoot rootBean = ctx.getBean(InjectRoot.class);
-      return new NetContextImpl(rootBean);
+      return new NetContextImpl(rootBean, _appParam);
     }
   }
 
@@ -31,4 +32,6 @@ public class NetContextFactory {
   }
 
   private final ApplicationContext _appContext;
+
+  private final Object _appParam;
 }
