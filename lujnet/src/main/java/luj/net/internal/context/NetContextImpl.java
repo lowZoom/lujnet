@@ -12,8 +12,9 @@ final class NetContextImpl implements NetContext {
   }
 
   @Override
-  public NetConnection createConnection(String host, int port) {
-    return new NetConnFactory(host, port, _appParam, _injectRoot.getReceiveListener()).create();
+  public NetConnection createConnection(String host, int port, Object attachment) {
+    return new NetConnFactory(host, port, _appParam, _injectRoot.getReceiveListener(),
+        attachment, this).create();
   }
 
   private final InjectRoot _injectRoot;

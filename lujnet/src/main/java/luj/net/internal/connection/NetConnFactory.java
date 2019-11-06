@@ -9,17 +9,19 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import luj.net.api.NetConnection;
+import luj.net.api.NetContext;
 import luj.net.api.data.NetReceiveListener;
 
 public class NetConnFactory {
 
-  public NetConnFactory(String host, int port,
-      Object appParam, NetReceiveListener receiveListener) {
+  public NetConnFactory(String host, int port, Object appParam,
+      NetReceiveListener receiveListener, Object connParam, NetContext netContext) {
     _host = host;
     _port = port;
-
     _appParam = appParam;
     _receiveListener = receiveListener;
+    _connParam = connParam;
+    _netContext = netContext;
   }
 
   public NetConnection create() {
@@ -30,17 +32,22 @@ public class NetConnFactory {
         .channel(NioSocketChannel.class)
         .option(ChannelOption.SO_KEEPALIVE, true);
 
+    NettyClientHandler nettyHandler = new NettyClientHandler(_appParam, _receiveListener);
     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4));
-        ch.pipeline().addLast(new NettyClientHandler(_appParam, _receiveListener));
+        ch.pipeline().addLast(nettyHandler);
       }
     });
 
     try {
       ChannelFuture f = bootstrap.connect(_host, _port).sync();
-      return new ConnectionImpl(f.channel());
+
+      ConnectionImpl conn = new ConnectionImpl(f.channel(), _connParam, _netContext);
+      nettyHandler.setLujnetConn(conn);
+
+      return conn;
 
     } catch (InterruptedException e) {
       throw new UnsupportedOperationException(e);
@@ -52,4 +59,7 @@ public class NetConnFactory {
 
   private final Object _appParam;
   private final NetReceiveListener _receiveListener;
+
+  private final Object _connParam;
+  private final NetContext _netContext;
 }
