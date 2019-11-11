@@ -13,19 +13,18 @@ import luj.net.api.data.NetReceiveListener;
 
 public class NetConnFactory {
 
-  public NetConnFactory(String host, int port,
+  public NetConnFactory(String host, int port, NioEventLoopGroup workGroup,
       NetReceiveListener receiveListener, Object connParam) {
     _host = host;
     _port = port;
+    _workGroup = workGroup;
     _receiveListener = receiveListener;
     _connParam = connParam;
   }
 
   public NetConnection create() {
-    NioEventLoopGroup workGroup = new NioEventLoopGroup();
-
     Bootstrap bootstrap = new Bootstrap()
-        .group(workGroup)
+        .group(_workGroup)
         .channel(NioSocketChannel.class)
         .option(ChannelOption.SO_KEEPALIVE, true);
 
@@ -53,6 +52,7 @@ public class NetConnFactory {
 
   private final String _host;
   private final int _port;
+  private final NioEventLoopGroup _workGroup;
 
   private final NetReceiveListener _receiveListener;
   private final Object _connParam;

@@ -1,5 +1,6 @@
 package luj.net.internal.context;
 
+import io.netty.channel.nio.NioEventLoopGroup;
 import luj.ava.spring.Internal;
 import luj.net.api.NetContext;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +21,7 @@ public class NetContextFactory {
       ctx.refresh();
 
       InjectRoot rootBean = ctx.getBean(InjectRoot.class);
-      return new NetContextImpl(rootBean);
+      return new NetContextImpl(rootBean, new NioEventLoopGroup());
     }
   }
 
