@@ -6,10 +6,9 @@ import luj.net.api.data.NetReceiveListener;
 
 final class ReceiveContextImpl implements NetReceiveListener.Context {
 
-  ReceiveContextImpl(ByteBuf data, NetConnection connection, Object appParam) {
+  ReceiveContextImpl(ByteBuf data, NetConnection connection) {
     _data = data;
     _connection = connection;
-    _appParam = appParam;
   }
 
   @Override
@@ -22,13 +21,7 @@ final class ReceiveContextImpl implements NetReceiveListener.Context {
     return _connection;
   }
 
-  @Override
-  public <T> T getApplicationParam() {
-    return (T) _appParam;
-  }
-
   private final ByteBuf _data;
-  private final NetConnection _connection;
 
-  private final Object _appParam;
+  private final NetConnection _connection;
 }

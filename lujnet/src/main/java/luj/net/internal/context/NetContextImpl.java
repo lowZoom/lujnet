@@ -6,18 +6,14 @@ import luj.net.internal.connection.NetConnFactory;
 
 final class NetContextImpl implements NetContext {
 
-  NetContextImpl(InjectRoot injectRoot, Object appParam) {
+  NetContextImpl(InjectRoot injectRoot) {
     _injectRoot = injectRoot;
-    _appParam = appParam;
   }
 
   @Override
   public NetConnection createConnection(String host, int port, Object attachment) {
-    return new NetConnFactory(host, port, _appParam, _injectRoot.getReceiveListener(),
-        attachment, this).create();
+    return new NetConnFactory(host, port, _injectRoot.getReceiveListener(), attachment).create();
   }
 
   private final InjectRoot _injectRoot;
-
-  private final Object _appParam;
 }

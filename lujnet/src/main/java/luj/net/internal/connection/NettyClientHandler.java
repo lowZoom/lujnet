@@ -9,8 +9,7 @@ import luj.net.internal.receive.NetConnReceiver;
 
 final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
-  NettyClientHandler(Object appParam, NetReceiveListener receiveListener) {
-    _appParam = appParam;
+  NettyClientHandler(NetReceiveListener receiveListener) {
     _receiveListener = receiveListener;
   }
 
@@ -20,7 +19,7 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) {
-    new NetConnReceiver((ByteBuf) msg, _lujnetConn, _appParam, _receiveListener).receive();
+    new NetConnReceiver((ByteBuf) msg, _lujnetConn, _receiveListener).receive();
   }
 
   @Override
@@ -30,6 +29,5 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   private NetConnection _lujnetConn;
 
-  private final Object _appParam;
   private final NetReceiveListener _receiveListener;
 }

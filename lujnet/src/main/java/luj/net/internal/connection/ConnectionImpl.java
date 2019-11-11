@@ -3,14 +3,12 @@ package luj.net.internal.connection;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import luj.net.api.NetConnection;
-import luj.net.api.NetContext;
 
 final class ConnectionImpl implements NetConnection {
 
-  ConnectionImpl(Channel channel, Object connParam, NetContext context) {
+  ConnectionImpl(Channel channel, Object connParam) {
     _channel = channel;
     _connParam = connParam;
-    _context = context;
   }
 
   @Override
@@ -28,11 +26,6 @@ final class ConnectionImpl implements NetConnection {
     }
   }
 
-  @Override
-  public NetContext getContext() {
-    return _context;
-  }
-
   @SuppressWarnings("unchecked")
   @Override
   public <T> T getApplicationParam() {
@@ -42,5 +35,4 @@ final class ConnectionImpl implements NetConnection {
   private final Channel _channel;
 
   private final Object _connParam;
-  private final NetContext _context;
 }

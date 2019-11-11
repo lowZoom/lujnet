@@ -10,8 +10,6 @@ public interface NetReceiveListener {
     ByteBuf getData();
 
     NetConnection getConnection();
-
-    <T> T getApplicationParam();
   }
 
   void onReceive(Context ctx) throws Exception;

@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 public enum LujNet {
   ;
 
-  public static NetContext create(ApplicationContext appContext, Object appParam) {
-    return new NetContextFactory(appContext, appParam).create();
+  public static NetContext create(ApplicationContext appContext) {
+    return new NetContextFactory(appContext).create();
   }
 }

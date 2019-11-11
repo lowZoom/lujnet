@@ -6,7 +6,5 @@ public interface NetConnection {
 
   void close();
 
-  NetContext getContext();
-
   <T> T getApplicationParam();
 }
