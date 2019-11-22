@@ -32,7 +32,7 @@ public class NetConnFactory {
     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
-        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535, 0, 4, 0, 4));
+        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(MB, 0, 4, 0, 4));
         ch.pipeline().addLast(nettyHandler);
       }
     });
@@ -49,6 +49,8 @@ public class NetConnFactory {
       throw new UnsupportedOperationException(e);
     }
   }
+
+  private static final int MB = 1048576;
 
   private final String _host;
   private final int _port;
