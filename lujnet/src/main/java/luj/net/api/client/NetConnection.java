@@ -1,4 +1,4 @@
-package luj.net.api;
+package luj.net.api.client;
 
 public interface NetConnection {
 

@@ -8,7 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import luj.net.api.NetConnection;
+import luj.net.api.client.NetConnection;
 import luj.net.api.data.NetReceiveListener;
 
 public class NetConnFactory {

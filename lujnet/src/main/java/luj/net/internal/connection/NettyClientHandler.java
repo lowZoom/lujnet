@@ -3,7 +3,7 @@ package luj.net.internal.connection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import luj.net.api.NetConnection;
+import luj.net.api.client.NetConnection;
 import luj.net.api.data.NetReceiveListener;
 import luj.net.internal.receive.NetConnReceiver;
 

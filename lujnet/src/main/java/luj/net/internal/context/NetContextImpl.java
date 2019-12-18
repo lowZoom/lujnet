@@ -1,9 +1,10 @@
 package luj.net.internal.context;
 
 import io.netty.channel.nio.NioEventLoopGroup;
-import luj.net.api.NetConnection;
 import luj.net.api.NetContext;
+import luj.net.api.client.NetConnection;
 import luj.net.internal.connection.NetConnFactory;
+import luj.net.internal.server.NetServerStarter;
 
 final class NetContextImpl implements NetContext {
 
@@ -13,9 +14,14 @@ final class NetContextImpl implements NetContext {
   }
 
   @Override
-  public NetConnection createConnection(String host, int port, Object attachment) {
+  public NetConnection createConnection(String host, int port, Object param) {
     return new NetConnFactory(host, port, _workGroup,
-        _injectRoot.getReceiveListener(), attachment).create();
+        _injectRoot.getReceiveListener(), param).create();
+  }
+
+  @Override
+  public void createServer(String host, int port, Object param) {
+    new NetServerStarter(host, port).start();
   }
 
   private final InjectRoot _injectRoot;

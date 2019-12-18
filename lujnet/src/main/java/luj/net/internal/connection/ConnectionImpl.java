@@ -2,7 +2,7 @@ package luj.net.internal.connection;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import luj.net.api.NetConnection;
+import luj.net.api.client.NetConnection;
 
 final class ConnectionImpl implements NetConnection {
 

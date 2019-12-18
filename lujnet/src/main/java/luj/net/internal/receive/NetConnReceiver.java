@@ -1,7 +1,7 @@
 package luj.net.internal.receive;
 
 import io.netty.buffer.ByteBuf;
-import luj.net.api.NetConnection;
+import luj.net.api.client.NetConnection;
 import luj.net.api.data.NetReceiveListener;
 
 public class NetConnReceiver {
