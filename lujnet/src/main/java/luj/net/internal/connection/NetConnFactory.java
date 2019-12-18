@@ -32,8 +32,9 @@ public class NetConnFactory {
     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
-        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(MB, 0, 4, 0, 4));
-        ch.pipeline().addLast(nettyHandler);
+        ch.pipeline()
+            .addLast(new LengthFieldBasedFrameDecoder(MB, 0, 4, 0, 4))
+            .addLast(nettyHandler);
       }
     });
 

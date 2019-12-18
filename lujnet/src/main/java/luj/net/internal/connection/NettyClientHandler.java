@@ -6,6 +6,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import luj.net.api.client.NetConnection;
 import luj.net.api.data.NetReceiveListener;
 import luj.net.internal.receive.NetConnReceiver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
@@ -23,9 +25,16 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
   }
 
   @Override
-  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    cause.printStackTrace();
+  public void channelInactive(ChannelHandlerContext ctx) {
+    LOG.debug("连接断开：{}", ctx.channel());
   }
+
+  @Override
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+    LOG.error(cause.getMessage(), cause);
+  }
+
+  private static final Logger LOG = LoggerFactory.getLogger(NettyClientHandler.class);
 
   private NetConnection _lujnetConn;
 
