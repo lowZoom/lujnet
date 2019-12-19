@@ -6,12 +6,14 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import luj.net.api.data.NetReceiveListener;
 
 public class NetServerStarter {
 
-  public NetServerStarter(String ip, int port) {
+  public NetServerStarter(String ip, int port, NetReceiveListener receiveListener) {
     _ip = ip;
     _port = port;
+    _receiveListener = receiveListener;
   }
 
   public void start() {
@@ -24,14 +26,15 @@ public class NetServerStarter {
       protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline()
             .addLast(new LengthFieldBasedFrameDecoder(16 * 1024 * 1024, 0, 4, 0, 4))
-        ;
+            .addLast(new NettyServerHandler(_receiveListener));
       }
     });
 
-
+    bootstrap.bind(_ip, _port);
   }
 
   private final String _ip;
-
   private final int _port;
+
+  private final NetReceiveListener _receiveListener;
 }
