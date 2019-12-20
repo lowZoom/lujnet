@@ -6,8 +6,9 @@ import luj.net.api.data.NetReceiveListener;
 
 final class ReceiveContextImpl implements NetReceiveListener.Context {
 
-  ReceiveContextImpl(ByteBuf data, NetConnection connection) {
+  ReceiveContextImpl(ByteBuf data, Object appParam, NetConnection connection) {
     _data = data;
+    _appParam = appParam;
     _connection = connection;
   }
 
@@ -16,12 +17,19 @@ final class ReceiveContextImpl implements NetReceiveListener.Context {
     return _data;
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T getApplicationParam() {
+    return (T) _appParam;
+  }
+
   @Override
   public NetConnection getConnection() {
     return _connection;
   }
 
   private final ByteBuf _data;
+  private final Object _appParam;
 
   private final NetConnection _connection;
 }

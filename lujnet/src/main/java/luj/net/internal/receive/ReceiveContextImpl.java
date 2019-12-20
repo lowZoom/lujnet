@@ -17,6 +17,11 @@ final class ReceiveContextImpl implements NetReceiveListener.Context {
   }
 
   @Override
+  public <T> T getApplicationParam() {
+    return _connection.getApplicationParam();
+  }
+
+  @Override
   public NetConnection getConnection() {
     return _connection;
   }

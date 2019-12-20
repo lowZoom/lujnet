@@ -21,7 +21,7 @@ final class NetContextImpl implements NetContext {
 
   @Override
   public void createServer(String host, int port, Object param) {
-    new NetServerStarter(host, port, _injectRoot.getReceiveListener()).start();
+    new NetServerStarter(host, port, param, _injectRoot.getReceiveListener()).start();
   }
 
   private final InjectRoot _injectRoot;

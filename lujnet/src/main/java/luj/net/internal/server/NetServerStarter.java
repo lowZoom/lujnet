@@ -10,9 +10,11 @@ import luj.net.api.data.NetReceiveListener;
 
 public class NetServerStarter {
 
-  public NetServerStarter(String ip, int port, NetReceiveListener receiveListener) {
+  public NetServerStarter(String ip, int port, Object applicationParam,
+      NetReceiveListener receiveListener) {
     _ip = ip;
     _port = port;
+    _applicationParam = applicationParam;
     _receiveListener = receiveListener;
   }
 
@@ -26,7 +28,7 @@ public class NetServerStarter {
       protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline()
             .addLast(new LengthFieldBasedFrameDecoder(16 * 1024 * 1024, 0, 4, 0, 4))
-            .addLast(new NettyServerHandler(_receiveListener));
+            .addLast(new NettyServerHandler(_applicationParam, _receiveListener));
       }
     });
 
@@ -36,5 +38,6 @@ public class NetServerStarter {
   private final String _ip;
   private final int _port;
 
+  private final Object _applicationParam;
   private final NetReceiveListener _receiveListener;
 }
