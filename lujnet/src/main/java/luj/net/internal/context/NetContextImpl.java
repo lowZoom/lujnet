@@ -3,7 +3,7 @@ package luj.net.internal.context;
 import io.netty.channel.nio.NioEventLoopGroup;
 import luj.net.api.NetContext;
 import luj.net.api.client.NetConnection;
-import luj.net.internal.connection.NetConnFactory;
+import luj.net.internal.client.NetClientConnector;
 import luj.net.internal.server.NetServerStarter;
 
 final class NetContextImpl implements NetContext {
@@ -15,8 +15,8 @@ final class NetContextImpl implements NetContext {
 
   @Override
   public NetConnection createConnection(String host, int port, Object param) {
-    return new NetConnFactory(host, port, _workGroup,
-        _injectRoot.getReceiveListener(), param).create();
+    return new NetClientConnector(host, port, _workGroup,
+        _injectRoot.getReceiveListener(), param).connect();
   }
 
   @Override

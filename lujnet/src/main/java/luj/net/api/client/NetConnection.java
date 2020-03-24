@@ -8,6 +8,8 @@ public interface NetConnection {
 
   void close();
 
+  boolean isClosed();
+
   /**
    * @see NetReceiveListener.Context#getApplicationParam
    */

@@ -26,6 +26,11 @@ final class ConnectionImpl implements NetConnection {
     }
   }
 
+  @Override
+  public boolean isClosed() {
+    return !_channel.isActive();
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public <T> T getApplicationParam() {

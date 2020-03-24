@@ -1,4 +1,4 @@
-package luj.net.internal.connection;
+package luj.net.internal.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
