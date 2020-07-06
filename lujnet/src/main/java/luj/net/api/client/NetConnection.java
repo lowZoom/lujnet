@@ -1,6 +1,6 @@
 package luj.net.api.client;
 
-import luj.net.api.data.NetReceiveListener;
+import luj.net.api.connection.NetReceiveListener;
 
 public interface NetConnection {
 

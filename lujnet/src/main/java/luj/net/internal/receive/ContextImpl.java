@@ -2,14 +2,9 @@ package luj.net.internal.receive;
 
 import io.netty.buffer.ByteBuf;
 import luj.net.api.client.NetConnection;
-import luj.net.api.data.NetReceiveListener;
+import luj.net.api.connection.NetReceiveListener;
 
-final class ReceiveContextImpl implements NetReceiveListener.Context {
-
-  ReceiveContextImpl(ByteBuf data, NetConnection connection) {
-    _data = data;
-    _connection = connection;
-  }
+final class ContextImpl implements NetReceiveListener.Context {
 
   @Override
   public ByteBuf getData() {
@@ -26,7 +21,7 @@ final class ReceiveContextImpl implements NetReceiveListener.Context {
     return _connection;
   }
 
-  private final ByteBuf _data;
+  ByteBuf _data;
 
-  private final NetConnection _connection;
+  NetConnection _connection;
 }

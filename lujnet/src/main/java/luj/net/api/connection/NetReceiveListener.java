@@ -1,4 +1,4 @@
-package luj.net.api.data;
+package luj.net.api.connection;
 
 import io.netty.buffer.ByteBuf;
 import luj.net.api.client.NetConnection;

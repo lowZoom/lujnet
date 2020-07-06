@@ -4,7 +4,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 import io.netty.buffer.ByteBuf;
 import luj.net.api.client.NetConnection;
-import luj.net.api.data.NetReceiveListener;
+import luj.net.api.connection.NetReceiveListener;
 
 public class NetConnReceiver {
 
@@ -18,7 +18,10 @@ public class NetConnReceiver {
   public void receive() {
     checkState(!_connection.isClosed());
 
-    ReceiveContextImpl ctx = new ReceiveContextImpl(_data, _connection);
+    ContextImpl ctx = new ContextImpl();
+    ctx._data = _data;
+    ctx._connection = _connection;
+
     try {
       _receiveListener.onReceive(ctx);
 

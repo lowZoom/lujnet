@@ -15,8 +15,8 @@ final class NetContextImpl implements NetContext {
 
   @Override
   public NetConnection createConnection(String host, int port, Object param) {
-    return new NetClientConnector(host, port, _workGroup,
-        _injectRoot.getReceiveListener(), param).connect();
+    return new NetClientConnector(host, port, _workGroup, _injectRoot.getReceiveListener(),
+        _injectRoot.getDisconnectListener(), param).connect();
   }
 
   @Override

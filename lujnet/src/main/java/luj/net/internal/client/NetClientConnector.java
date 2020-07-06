@@ -9,17 +9,20 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import luj.net.api.client.NetConnection;
-import luj.net.api.data.NetReceiveListener;
+import luj.net.api.connection.NetDisconnectListener;
+import luj.net.api.connection.NetReceiveListener;
 import luj.net.internal.connection.NetConnFactory;
 
 public class NetClientConnector {
 
   public NetClientConnector(String host, int port, NioEventLoopGroup workGroup,
-      NetReceiveListener receiveListener, Object connParam) {
+      NetReceiveListener receiveListener, NetDisconnectListener disconnectListener,
+      Object connParam) {
     _host = host;
     _port = port;
     _workGroup = workGroup;
     _receiveListener = receiveListener;
+    _disconnectListener = disconnectListener;
     _connParam = connParam;
   }
 
@@ -29,7 +32,7 @@ public class NetClientConnector {
         .channel(NioSocketChannel.class)
         .option(ChannelOption.SO_KEEPALIVE, true);
 
-    NettyClientHandler nettyHandler = new NettyClientHandler(_receiveListener);
+    NettyClientHandler nettyHandler = new NettyClientHandler(_receiveListener, _disconnectListener);
     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
@@ -59,5 +62,7 @@ public class NetClientConnector {
   private final NioEventLoopGroup _workGroup;
 
   private final NetReceiveListener _receiveListener;
+  private final NetDisconnectListener _disconnectListener;
+
   private final Object _connParam;
 }

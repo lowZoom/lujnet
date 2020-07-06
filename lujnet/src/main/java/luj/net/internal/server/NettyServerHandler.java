@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import luj.net.api.client.NetConnection;
-import luj.net.api.data.NetReceiveListener;
+import luj.net.api.connection.NetReceiveListener;
 import luj.net.internal.connection.NetConnFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

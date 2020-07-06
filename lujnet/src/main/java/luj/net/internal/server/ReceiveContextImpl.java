@@ -2,7 +2,7 @@ package luj.net.internal.server;
 
 import io.netty.buffer.ByteBuf;
 import luj.net.api.client.NetConnection;
-import luj.net.api.data.NetReceiveListener;
+import luj.net.api.connection.NetReceiveListener;
 
 final class ReceiveContextImpl implements NetReceiveListener.Context {
 
