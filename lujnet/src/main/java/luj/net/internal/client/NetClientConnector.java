@@ -37,7 +37,7 @@ public class NetClientConnector {
       @Override
       protected void initChannel(SocketChannel ch) {
         ch.pipeline()
-            .addLast(new LengthFieldBasedFrameDecoder(MB, 0, 4, 0, 4))
+            .addLast(new LengthFieldBasedFrameDecoder(10 * MB, 0, 4, 0, 4))
             .addLast(nettyHandler);
       }
     });
