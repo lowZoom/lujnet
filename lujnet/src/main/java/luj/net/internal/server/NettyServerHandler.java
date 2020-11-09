@@ -9,6 +9,10 @@ import luj.net.internal.connection.NetConnFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see NettyServerHandlerV2
+ */
+@Deprecated
 final class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
   NettyServerHandler(Object applicationParam, NetReceiveListener receiveListener) {
@@ -25,7 +29,7 @@ final class NettyServerHandler extends ChannelInboundHandlerAdapter {
   }
 
   @Override
-  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
     LOG.error(cause.getMessage(), cause);
   }
 

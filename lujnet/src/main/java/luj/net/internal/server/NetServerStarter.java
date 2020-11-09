@@ -29,6 +29,7 @@ public class NetServerStarter {
         ch.pipeline()
             .addLast(new LengthFieldBasedFrameDecoder(16 * 1024 * 1024, 0, 4, 0, 4))
             .addLast(new NettyServerHandler(_applicationParam, _receiveListener));
+//            .addLast(NettyServerHandlerV2.create(_applicationParam, _receiveListener));
       }
     });
 
@@ -38,6 +39,8 @@ public class NetServerStarter {
   private final String _ip;
   private final int _port;
 
-  private final Object _applicationParam;
+  //  private final List<FrameDataReceiver> _receiverList;
   private final NetReceiveListener _receiveListener;
+
+  private final Object _applicationParam;
 }
