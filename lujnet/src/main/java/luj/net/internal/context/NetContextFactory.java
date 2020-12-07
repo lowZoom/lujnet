@@ -21,7 +21,7 @@ public class NetContextFactory {
       ctx.refresh();
 
       InjectRoot rootBean = ctx.getBean(InjectRoot.class);
-      return new NetContextImpl(rootBean, new NioEventLoopGroup());
+      return new NetContextImpl(rootBean, new NioEventLoopGroup(1));
     }
   }
 

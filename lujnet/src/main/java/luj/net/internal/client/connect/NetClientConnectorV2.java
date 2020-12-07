@@ -1,4 +1,4 @@
-package luj.net.internal.client;
+package luj.net.internal.client.connect;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -8,31 +8,34 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import java.util.function.Consumer;
 import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetDisconnectListener;
-import luj.net.api.connection.NetReceiveListener;
 import luj.net.internal.connection.NetConnFactory;
 
-public class NetClientConnector {
+public class NetClientConnectorV2 {
 
-  public NetClientConnector(String host, int port, NioEventLoopGroup workGroup,
-      NetReceiveListener receiveListener, NetDisconnectListener disconnectListener,
-      Object connParam) {
-    _host = host;
-    _port = port;
+  public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller,
+      NioEventLoopGroup workGroup, NetDisconnectListener disconnectListener) {
+    _configFiller = configFiller;
     _workGroup = workGroup;
-    _receiveListener = receiveListener;
     _disconnectListener = disconnectListener;
-    _connParam = connParam;
   }
 
   public NetConnection connect() {
+    ConfigImpl conf = new ConfigImpl();
+    _configFiller.accept(conf);
+
     Bootstrap bootstrap = new Bootstrap()
         .group(_workGroup)
         .channel(NioSocketChannel.class)
         .option(ChannelOption.SO_KEEPALIVE, true);
 
-    NettyClientHandler nettyHandler = new NettyClientHandler(_receiveListener, _disconnectListener);
+    if (conf._connectTimeout > 0) {
+      bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, conf._connectTimeout);
+    }
+
+    NettyClientHandler nettyHandler = new NettyClientHandler(conf._receiver, _disconnectListener);
     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
@@ -42,22 +45,20 @@ public class NetClientConnector {
       }
     });
 
-    ChannelFuture f = bootstrap.connect(_host, _port).syncUninterruptibly();
+    ChannelFuture result = bootstrap.connect(conf._host, conf._port);
+    result.syncUninterruptibly();
 
-    NetConnection conn = new NetConnFactory(f.channel(), _connParam).create();
+    NetConnection conn = new NetConnFactory(result.channel(), null).create();
     nettyHandler.setLujnetConn(conn);
 
     return conn;
   }
 
+  @Deprecated
   private static final int MB = 1048576;
 
-  private final String _host;
-  private final int _port;
+  private final Consumer<NetConnection.Config> _configFiller;
   private final NioEventLoopGroup _workGroup;
 
-  private final NetReceiveListener _receiveListener;
   private final NetDisconnectListener _disconnectListener;
-
-  private final Object _connParam;
 }

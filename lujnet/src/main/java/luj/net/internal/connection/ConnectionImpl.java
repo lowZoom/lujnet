@@ -13,7 +13,7 @@ final class ConnectionImpl implements NetConnection {
 
   @Override
   public void send(byte[] data) {
-    _channel.writeAndFlush(Unpooled.copiedBuffer(data));
+    _channel.writeAndFlush(Unpooled.wrappedBuffer(data));
   }
 
   @Override
