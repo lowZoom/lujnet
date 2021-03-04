@@ -2,6 +2,7 @@ package luj.net.api;
 
 import java.util.function.Consumer;
 import luj.net.api.client.NetConnection;
+import luj.net.api.server.NetServer;
 
 public interface NetContext {
 
@@ -13,5 +14,11 @@ public interface NetContext {
 
   NetConnection createConnection(Consumer<NetConnection.Config> config);
 
+  /**
+   * @see #createServer()
+   */
+  @Deprecated
   void createServer(String host, int port, Object param);
+
+  NetServer createServer();
 }

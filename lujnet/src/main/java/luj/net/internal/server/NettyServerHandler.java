@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @see NettyServerHandlerV2
+ * @see luj.net.internal.server.bind.NettyServerHandlerV2
  */
 @Deprecated
 final class NettyServerHandler extends ChannelInboundHandlerAdapter {

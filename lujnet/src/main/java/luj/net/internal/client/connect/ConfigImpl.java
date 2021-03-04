@@ -2,6 +2,7 @@ package luj.net.internal.client.connect;
 
 import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetReceiveListener;
+import luj.net.api.server.FrameDataReceiver;
 
 final class ConfigImpl implements NetConnection.Config {
 
@@ -29,9 +30,17 @@ final class ConfigImpl implements NetConnection.Config {
     return this;
   }
 
+  @Override
+  public NetConnection.Config frameReceiver(FrameDataReceiver receiver) {
+    _frameReceiver = receiver;
+    return this;
+  }
+
   String _host;
   int _port;
 
   int _connectTimeout;
   NetReceiveListener _receiver;
+
+  FrameDataReceiver _frameReceiver;
 }

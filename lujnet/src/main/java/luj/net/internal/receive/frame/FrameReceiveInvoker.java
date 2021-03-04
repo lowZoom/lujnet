@@ -1,40 +1,35 @@
 package luj.net.internal.receive.frame;
 
 import io.netty.buffer.ByteBuf;
-import java.util.Map;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.receive.init.FrameReceiveState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class FrameReceiveInvoker {
+public enum FrameReceiveInvoker {
+  GET;
 
-  public FrameReceiveInvoker(FrameReceiveState receiveState, ByteBuf in) {
-    _receiveState = receiveState;
-    _in = in;
-  }
-
-  public void invoke() {
-    ByteBuf buffer = _receiveState.getBuffer();
-    buffer.writeBytes(_in);
-
+  public void invoke(ByteBuf frameBuf, FrameReceiveState receiveState, Object connState)
+      throws Exception {
     RecvContextImpl ctx = new RecvContextImpl();
-    ctx._result = new RecvResultImpl();
+    ctx._lastFrame = frameBuf;
+    ctx._connectionState = connState;
 
-    FrameDataReceiver nextReceiver = getNextReceiver();
-    nextReceiver.receive(ctx);
+    RecvResultImpl result = new RecvResultImpl();
+    ctx._result = result;
 
-    //TODO: 接收外部设置
+    FrameDataReceiver curReceiver = receiveState.getNextReceiver();
+    curReceiver.receive(ctx);
 
-//    NetConnection conn = new NetConnFactory(ctx.channel(), null).create();
-//    ReceiveContextImpl receiveCtx = new ReceiveContextImpl(, _applicationParam, conn);
-//    _receiveListener.onReceive(receiveCtx);
+    int waitBytes = result._byteCountToWait;
+    FrameDataReceiver nextRecv = result._nextReceiver;
+
+    LOG.debug("当前：{}，等：{}，下一个：{}", curReceiver.getClass().getSimpleName(),
+        waitBytes, nextRecv.getClass().getSimpleName());
+
+    receiveState.setByteCountToWait(waitBytes);
+    receiveState.setNextReceiver(nextRecv);
   }
 
-  private FrameDataReceiver getNextReceiver() {
-    Map<Class<?>, FrameDataReceiver> receiverMap = _receiveState.getReceiverMap();
-    return receiverMap.get(_receiveState.getNextReceiver());
-  }
-
-  private final FrameReceiveState _receiveState;
-
-  private final ByteBuf _in;
+  private static final Logger LOG = LoggerFactory.getLogger(FrameReceiveInvoker.class);
 }

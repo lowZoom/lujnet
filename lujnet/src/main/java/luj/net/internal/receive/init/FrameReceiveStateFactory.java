@@ -24,16 +24,22 @@ public class FrameReceiveStateFactory {
         .collect(Collectors.toMap(FrameDataReceiver::getClass, Function.identity()));
 
     ByteBuf buffer = Unpooled.buffer();
-    FrameReceiveState state = new FrameReceiveState(buffer, receiverMap, _receiveListener);
+    ReceiveCumulateState cumulateState = new ReceiveCumulateState();
+
+    FrameReceiveState state = new FrameReceiveState(
+        buffer, cumulateState, receiverMap, _receiveListener);
 
     state.setNextReceiver(getHeadReceiver());
     return state;
   }
 
-  private Class<?> getHeadReceiver() {
-    List<Class<?>> headList = _receiverList.stream()
-        .map(FrameDataReceiver::getClass)
-        .filter(this::isHead)
+  private FrameDataReceiver getHeadReceiver() {
+    if (_receiverList.size() == 1) {
+      return _receiverList.get(0);
+    }
+
+    List<FrameDataReceiver> headList = _receiverList.stream()
+        .filter(r -> isHead(r.getClass()))
         .collect(Collectors.toList());
 
     int headCount = headList.size();

@@ -1,6 +1,7 @@
 package luj.net.api.client;
 
 import luj.net.api.connection.NetReceiveListener;
+import luj.net.api.server.FrameDataReceiver;
 
 public interface NetConnection {
 
@@ -12,7 +13,10 @@ public interface NetConnection {
 
     Config connectTimeoutMillis(int timeoutMs);
 
+    @Deprecated
     Config receiveListener(NetReceiveListener listener);
+
+    Config frameReceiver(FrameDataReceiver receiver);
   }
 
   void send(byte[] data);

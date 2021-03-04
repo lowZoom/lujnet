@@ -11,12 +11,12 @@ final class RecvResultImpl implements FrameDataReceiver.Result {
   }
 
   @Override
-  public FrameDataReceiver.Result nextReceiver(Class<? extends FrameDataReceiver> receiver) {
+  public FrameDataReceiver.Result nextReceiver(FrameDataReceiver receiver) {
     _nextReceiver = receiver;
     return this;
   }
 
   int _byteCountToWait;
 
-  Class<?> _nextReceiver;
+  FrameDataReceiver _nextReceiver;
 }

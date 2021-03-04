@@ -17,15 +17,17 @@ public interface FrameDataReceiver {
 
     <T> T getLastFrame();
 
-    Result finish();
+    <T> T getConnectionState();
+
+    Result then();
   }
 
   interface Result {
 
     Result waitBytes(int byteCount);
 
-    Result nextReceiver(Class<? extends FrameDataReceiver> receiver);
+    Result nextReceiver(FrameDataReceiver receiver);
   }
 
-  Result receive(Context ctx);
+  Result receive(Context ctx) throws Exception;
 }

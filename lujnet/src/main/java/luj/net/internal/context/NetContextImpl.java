@@ -4,8 +4,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import java.util.function.Consumer;
 import luj.net.api.NetContext;
 import luj.net.api.client.NetConnection;
+import luj.net.api.server.NetServer;
 import luj.net.internal.client.NetClientConnector;
 import luj.net.internal.client.connect.NetClientConnectorV2;
+import luj.net.internal.server.NetServerFactory;
 import luj.net.internal.server.NetServerStarter;
 
 final class NetContextImpl implements NetContext {
@@ -30,6 +32,12 @@ final class NetContextImpl implements NetContext {
   @Override
   public void createServer(String host, int port, Object param) {
     new NetServerStarter(host, port, param, _injectRoot.getReceiveListener()).start();
+  }
+
+  @Override
+  public NetServer createServer() {
+    return new NetServerFactory(_injectRoot.getAcceptInitializer(),
+        _injectRoot.getFrameReceivers(), _injectRoot.getReceiveListener()).create();
   }
 
   private final InjectRoot _injectRoot;
