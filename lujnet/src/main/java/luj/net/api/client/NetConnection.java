@@ -1,5 +1,6 @@
 package luj.net.api.client;
 
+import io.netty.buffer.ByteBuf;
 import luj.net.api.connection.NetReceiveListener;
 import luj.net.api.server.FrameDataReceiver;
 
@@ -20,6 +21,8 @@ public interface NetConnection {
   }
 
   void send(byte[] data);
+
+  void send(ByteBuf data);
 
   void close();
 

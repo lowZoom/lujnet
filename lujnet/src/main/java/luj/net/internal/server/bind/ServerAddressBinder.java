@@ -43,7 +43,8 @@ public class ServerAddressBinder {
 
   private NettyServerHandlerV2 createNettyHandler() {
     NettyServerHandlerV2 handler = new NettyServerHandlerV2();
-    handler._connState = new AcceptInitInvoker(_acceptInitializer, _bindParam).invoke();
+    handler._connState = new AcceptInitInvoker(
+        _acceptInitializer, _host, _port, _bindParam).invoke();
 
     handler._receiveState = new FrameReceiveStateFactory(
         _frameReceivers, _receiveListener).create();

@@ -4,14 +4,16 @@ public interface ConnectionAcceptInitializer {
 
   interface Context {
 
-    Connection getConnection();
+    Address getBindAddress();
 
     <T> T getBindParam();
   }
 
-  interface Connection {
+  interface Address {
 
+    String host();
 
+    int port();
   }
 
   Object init(Context ctx);

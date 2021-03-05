@@ -1,5 +1,6 @@
 package luj.net.internal.connection;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import luj.net.api.client.NetConnection;
@@ -13,7 +14,12 @@ final class ConnectionImpl implements NetConnection {
 
   @Override
   public void send(byte[] data) {
-    _channel.writeAndFlush(Unpooled.wrappedBuffer(data));
+    send(Unpooled.wrappedBuffer(data));
+  }
+
+  @Override
+  public void send(ByteBuf data) {
+    _channel.writeAndFlush(data);
   }
 
   @Override
