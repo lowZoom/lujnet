@@ -25,14 +25,14 @@ final class ConfigImpl implements NetConnection.Config {
   }
 
   @Override
-  public NetConnection.Config receiveListener(NetReceiveListener listener) {
-    _receiver = listener;
+  public NetConnection.Config frameReceiver(FrameDataReceiver receiver) {
+    _frameReceiver = receiver;
     return this;
   }
 
   @Override
-  public NetConnection.Config frameReceiver(FrameDataReceiver receiver) {
-    _frameReceiver = receiver;
+  public NetConnection.Config receiveListener(NetReceiveListener listener) {
+    _receiver = listener;
     return this;
   }
 
@@ -40,7 +40,7 @@ final class ConfigImpl implements NetConnection.Config {
   int _port;
 
   int _connectTimeout;
-  NetReceiveListener _receiver;
-
   FrameDataReceiver _frameReceiver;
+
+  NetReceiveListener _receiver;
 }

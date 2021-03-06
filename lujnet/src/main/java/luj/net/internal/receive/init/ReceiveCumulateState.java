@@ -6,34 +6,30 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 public class ReceiveCumulateState {
 
   public ByteToMessageDecoder.Cumulator getCumulator() {
-    return cumulator;
+    return ByteToMessageDecoder.MERGE_CUMULATOR;
   }
 
   public int getDiscardAfterReads() {
-    return discardAfterReads;
+    return 16;
   }
 
   public ByteBuf getCumulation() {
-    return cumulation;
+    return _cumulation;
   }
 
   public void setCumulation(ByteBuf cumulation) {
-    this.cumulation = cumulation;
+    _cumulation = cumulation;
   }
 
   public int getNumReads() {
-    return numReads;
+    return _numReads;
   }
 
   public void setNumReads(int numReads) {
-    this.numReads = numReads;
+    _numReads = numReads;
   }
 
-  ByteBuf cumulation;
-  private ByteToMessageDecoder.Cumulator cumulator = ByteToMessageDecoder.MERGE_CUMULATOR;
-  private boolean first;
+  private ByteBuf _cumulation;
 
-  private int discardAfterReads = 16;
-  private int numReads;
-
+  private int _numReads;
 }

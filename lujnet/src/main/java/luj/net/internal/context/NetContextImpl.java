@@ -37,7 +37,7 @@ final class NetContextImpl implements NetContext {
   @Override
   public NetServer createServer() {
     return new NetServerFactory(_injectRoot.getAcceptInitializer(),
-        _injectRoot.getFrameReceivers(), _injectRoot.getReceiveListener()).create();
+        _injectRoot.getFrameReceivers()).create();
   }
 
   private final InjectRoot _injectRoot;

@@ -6,6 +6,10 @@ import io.netty.buffer.ByteBuf;
 import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetReceiveListener;
 
+/**
+ * @see luj.net.internal.receive.frame.FrameReceiveInvoker
+ */
+@Deprecated
 public class NetConnReceiver {
 
   public NetConnReceiver(ByteBuf data, NetConnection connection,

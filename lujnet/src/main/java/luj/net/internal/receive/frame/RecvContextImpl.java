@@ -1,13 +1,13 @@
 package luj.net.internal.receive.frame;
 
+import io.netty.buffer.ByteBuf;
 import luj.net.api.server.FrameDataReceiver;
 
 final class RecvContextImpl implements FrameDataReceiver.Context {
 
-  @SuppressWarnings("unchecked")
   @Override
-  public <T> T getLastFrame() {
-    return (T) _lastFrame;
+  public ByteBuf getLastFrame() {
+    return _lastFrame;
   }
 
   @SuppressWarnings("unchecked")
@@ -21,7 +21,7 @@ final class RecvContextImpl implements FrameDataReceiver.Context {
     return _result;
   }
 
-  Object _lastFrame;
+  ByteBuf _lastFrame;
   Object _connectionState;
 
   RecvResultImpl _result;

@@ -1,5 +1,7 @@
 package luj.net.internal.receive.read;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,13 +15,17 @@ import luj.net.internal.receive.init.ReceiveCumulateState;
 public enum ReceiveChannelReader {
   GET;
 
+  /**
+   * @see ByteToMessageDecoder#channelRead
+   */
   public void read(ChannelHandlerContext ctx, ByteBuf inBuf, FrameReceiveState state,
       Object bindParam) throws Exception {
     ReceiveCumulateState cumulating = state.getCumulateState();
-    ByteBuf cumulation = cumulating.getCumulation();
     ByteToMessageDecoder.Cumulator cumulator = cumulating.getCumulator();
-    int numReads = cumulating.getNumReads();
     int discardAfterReads = cumulating.getDiscardAfterReads();
+
+    ByteBuf cumulation = cumulating.getCumulation();
+    int numReads = cumulating.getNumReads();
 
     boolean first = cumulation == null;
     try {
@@ -51,6 +57,7 @@ public enum ReceiveChannelReader {
       Object bindParam) throws Exception {
     while (in.isReadable()) {
       int oldInputLength = in.readableBytes();
+      checkState(oldInputLength > 0);
       decode(in, state, bindParam);
 
       // Check if this handler was removed before continuing the loop.
@@ -81,16 +88,18 @@ public enum ReceiveChannelReader {
     }
   }
 
+  /**
+   * @see io.netty.handler.codec.LengthFieldBasedFrameDecoder#decode(ChannelHandlerContext, ByteBuf)
+   */
   private void decode(ByteBuf in, FrameReceiveState state, Object bindParam) throws Exception {
-    int waitByteCount = state.getByteCountToWait();
-    if (in.readableBytes() < waitByteCount) {
+    int readableBytes = in.readableBytes();
+    int bytesToWait = state.getByteCountToWait();
+    if (readableBytes < bytesToWait) {
       return;
     }
 
-    //TODO: 调用下一个接收器
-
     int readerIndex = in.readerIndex();
-    int actualFrameLength = waitByteCount;
+    int actualFrameLength = (bytesToWait <= 0) ? readableBytes : bytesToWait;
 
     ByteBuf frame = extractFrame(in, readerIndex, actualFrameLength);
     in.readerIndex(readerIndex + actualFrameLength);
@@ -98,7 +107,7 @@ public enum ReceiveChannelReader {
     FrameReceiveInvoker.GET.invoke(frame, state, bindParam);
   }
 
-  ByteBuf extractFrame(ByteBuf buffer, int index, int length) {
+  private ByteBuf extractFrame(ByteBuf buffer, int index, int length) {
     return buffer.retainedSlice(index, length);
   }
 }

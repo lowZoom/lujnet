@@ -3,12 +3,8 @@ package luj.net.internal.server.bind;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import java.util.List;
-import luj.net.api.connection.NetReceiveListener;
-import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.receive.frame.FrameReceiveInvoker;
 import luj.net.internal.receive.init.FrameReceiveState;
-import luj.net.internal.receive.init.FrameReceiveStateFactory;
 import luj.net.internal.receive.read.ReceiveChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +30,5 @@ final class NettyServerHandlerV2 extends ChannelInboundHandlerAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(NettyServerHandlerV2.class);
 
   FrameReceiveState _receiveState;
-
   Object _connState;
 }

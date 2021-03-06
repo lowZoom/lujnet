@@ -27,10 +27,10 @@ final class InjectRoot {
     return _disconnectListener;
   }
 
-  @Autowired
+  @Autowired(required = false)
   private ConnectionAcceptInitializer _acceptInitializer;
 
-  @Autowired
+  @Autowired(required = false)
   private List<FrameDataReceiver> _frameReceivers;
 
   //FIXME: 建立连接的时候单独传

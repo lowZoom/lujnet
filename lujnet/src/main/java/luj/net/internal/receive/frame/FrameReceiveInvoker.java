@@ -11,6 +11,17 @@ public enum FrameReceiveInvoker {
 
   public void invoke(ByteBuf frameBuf, FrameReceiveState receiveState, Object connState)
       throws Exception {
+    FrameDataReceiver curReceiver = receiveState.getNextReceiver();
+    if (curReceiver == null) {
+      int frameLen = (frameBuf == null) ? -1 : frameBuf.readableBytes();
+      LOG.warn("未发现数据接收器，跳过：{}", frameLen);
+
+      if (frameBuf != null) {
+        frameBuf.readerIndex(frameBuf.readerIndex() + frameLen);
+      }
+      return;
+    }
+
     RecvContextImpl ctx = new RecvContextImpl();
     ctx._lastFrame = frameBuf;
     ctx._connectionState = connState;
@@ -18,7 +29,6 @@ public enum FrameReceiveInvoker {
     RecvResultImpl result = new RecvResultImpl();
     ctx._result = result;
 
-    FrameDataReceiver curReceiver = receiveState.getNextReceiver();
     curReceiver.receive(ctx);
 
     int waitBytes = result._byteCountToWait;

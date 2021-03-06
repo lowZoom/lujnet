@@ -5,26 +5,18 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetDisconnectListener;
-import luj.net.api.connection.NetReceiveListener;
+import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.disconnect.NetDisconnInvoker;
-import luj.net.internal.receive.NetConnReceiver;
+import luj.net.internal.receive.init.FrameReceiveState;
+import luj.net.internal.receive.read.ReceiveChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
-  NettyClientHandler(NetReceiveListener receiveListener, NetDisconnectListener disconnectListener) {
-    _receiveListener = receiveListener;
-    _disconnectListener = disconnectListener;
-  }
-
-  public void setLujnetConn(NetConnection lujnetConn) {
-    _lujnetConn = lujnetConn;
-  }
-
   @Override
-  public void channelRead(ChannelHandlerContext ctx, Object msg) {
-    new NetConnReceiver((ByteBuf) msg, _lujnetConn, _receiveListener).receive();
+  public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    ReceiveChannelReader.GET.read(ctx, (ByteBuf) msg, _receiveState, null);
   }
 
   @Override
@@ -38,11 +30,11 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
     LOG.error(cause.getMessage(), cause);
   }
 
-  private static final Logger LOG = LoggerFactory.getLogger(
-      NettyClientHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(NettyClientHandler.class);
 
-  private NetConnection _lujnetConn;
+  FrameReceiveState _receiveState;
+  NetConnection _lujnetConn;
 
-  private final NetReceiveListener _receiveListener;
-  private final NetDisconnectListener _disconnectListener;
+  FrameDataReceiver _frameReceiver;
+  NetDisconnectListener _disconnectListener;
 }

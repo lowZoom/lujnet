@@ -1,5 +1,6 @@
 package luj.net.api.server;
 
+import io.netty.buffer.ByteBuf;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,7 +16,7 @@ public interface FrameDataReceiver {
 
   interface Context {
 
-    <T> T getLastFrame();
+    ByteBuf getLastFrame();
 
     <T> T getConnectionState();
 
