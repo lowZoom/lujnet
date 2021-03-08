@@ -13,6 +13,10 @@ import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.connection.NetReceiveListener;
 import luj.net.internal.connection.NetConnFactory;
 
+/**
+ * @see luj.net.internal.client.connect.NetClientConnectorV2
+ */
+@Deprecated
 public class NetClientConnector {
 
   public NetClientConnector(String host, int port, NioEventLoopGroup workGroup,

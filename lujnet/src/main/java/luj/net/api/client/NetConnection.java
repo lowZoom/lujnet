@@ -1,6 +1,7 @@
 package luj.net.api.client;
 
 import io.netty.buffer.ByteBuf;
+import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.connection.NetReceiveListener;
 import luj.net.api.server.FrameDataReceiver;
 
@@ -18,6 +19,8 @@ public interface NetConnection {
     Config receiveListener(NetReceiveListener listener);
 
     Config frameReceiver(FrameDataReceiver receiver);
+
+    Config disconnectListener(NetDisconnectListener listener);
   }
 
   void send(byte[] data);

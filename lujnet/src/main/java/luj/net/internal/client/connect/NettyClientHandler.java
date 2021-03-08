@@ -21,7 +21,6 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelInactive(ChannelHandlerContext ctx) {
-    LOG.debug("连接断开：{}", ctx.channel());
     new NetDisconnInvoker(_disconnectListener, _lujnetConn).invoke();
   }
 

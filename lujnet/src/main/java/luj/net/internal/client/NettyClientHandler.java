@@ -11,6 +11,7 @@ import luj.net.internal.receive.NetConnReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   NettyClientHandler(NetReceiveListener receiveListener, NetDisconnectListener disconnectListener) {

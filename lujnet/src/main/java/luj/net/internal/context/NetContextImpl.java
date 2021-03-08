@@ -25,8 +25,7 @@ final class NetContextImpl implements NetContext {
 
   @Override
   public NetConnection createConnection(Consumer<NetConnection.Config> config) {
-    return new NetClientConnectorV2(config, _workGroup,
-        _injectRoot.getDisconnectListener()).connect();
+    return new NetClientConnectorV2(config, _workGroup).connect();
   }
 
   @Override

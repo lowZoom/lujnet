@@ -10,7 +10,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import java.util.function.Consumer;
 import luj.net.api.client.NetConnection;
-import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.connection.NetConnFactory;
 import luj.net.internal.receive.init.FrameReceiveStateFactory;
@@ -18,10 +17,9 @@ import luj.net.internal.receive.init.FrameReceiveStateFactory;
 public class NetClientConnectorV2 {
 
   public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller,
-      NioEventLoopGroup workGroup, NetDisconnectListener disconnectListener) {
+      NioEventLoopGroup workGroup) {
     _configFiller = configFiller;
     _workGroup = workGroup;
-    _disconnectListener = disconnectListener;
   }
 
   public NetConnection connect() {
@@ -38,7 +36,7 @@ public class NetClientConnectorV2 {
     }
 
     NettyClientHandler nettyHandler = new NettyClientHandler();
-    nettyHandler._disconnectListener = _disconnectListener;
+    nettyHandler._disconnectListener = conf._disconnectListener;
 
     FrameDataReceiver frameReceiver = conf._frameReceiver;
     nettyHandler._frameReceiver = frameReceiver;
@@ -63,7 +61,6 @@ public class NetClientConnectorV2 {
   }
 
   private final Consumer<NetConnection.Config> _configFiller;
-  private final NioEventLoopGroup _workGroup;
 
-  private final NetDisconnectListener _disconnectListener;
+  private final NioEventLoopGroup _workGroup;
 }
