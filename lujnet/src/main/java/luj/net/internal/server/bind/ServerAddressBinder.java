@@ -32,17 +32,17 @@ public class ServerAddressBinder {
     bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
-        ch.pipeline().addLast(createNettyHandler());
+        ch.pipeline().addLast(createNettyHandler(ch));
       }
     });
 
     bootstrap.bind(_host, _port);
   }
 
-  private NettyServerHandlerV2 createNettyHandler() {
+  private NettyServerHandlerV2 createNettyHandler(SocketChannel channel) {
     NettyServerHandlerV2 handler = new NettyServerHandlerV2();
     handler._connState = new AcceptInitInvoker(
-        _acceptInitializer, _host, _port, _bindParam).invoke();
+        _acceptInitializer, channel, _host, _port, _bindParam).invoke();
 
     handler._receiveState = new FrameReceiveStateFactory(_frameReceivers).create();
     return handler;
