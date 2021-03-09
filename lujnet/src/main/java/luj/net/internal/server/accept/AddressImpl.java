@@ -1,8 +1,16 @@
 package luj.net.internal.server.accept;
 
+import java.net.InetSocketAddress;
 import luj.net.api.server.ConnectionAcceptInitializer;
 
 final class AddressImpl implements ConnectionAcceptInitializer.Address {
+
+  static AddressImpl from(InetSocketAddress addr) {
+    AddressImpl result = new AddressImpl();
+    result._host = addr.getHostString();
+    result._port = addr.getPort();
+    return result;
+  }
 
   @Override
   public String host() {

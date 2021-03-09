@@ -20,6 +20,8 @@ public interface ConnectionAcceptInitializer {
     void flush();
 
     void close();
+
+    Address getRemoteAddress();
   }
 
   interface Address {
