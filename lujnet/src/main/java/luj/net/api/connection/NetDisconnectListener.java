@@ -4,6 +4,9 @@ public interface NetDisconnectListener {
 
   interface Context {
 
+    <T> T getConnectionState();
+
+    @Deprecated
     <T> T getApplicationParam();
   }
 

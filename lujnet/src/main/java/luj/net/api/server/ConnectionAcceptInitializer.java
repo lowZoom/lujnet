@@ -18,6 +18,8 @@ public interface ConnectionAcceptInitializer {
     void write(ByteBuf data);
 
     void flush();
+
+    void close();
   }
 
   interface Address {

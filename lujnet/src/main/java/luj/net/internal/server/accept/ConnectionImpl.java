@@ -16,5 +16,10 @@ final class ConnectionImpl implements ConnectionAcceptInitializer.Connection {
     _channel.flush();
   }
 
+  @Override
+  public void close() {
+    _channel.close();
+  }
+
   SocketChannel _channel;
 }

@@ -6,6 +6,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import java.util.List;
+import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.server.ConnectionAcceptInitializer;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.receive.init.FrameReceiveStateFactory;
@@ -15,12 +16,13 @@ public class ServerAddressBinder {
 
   public ServerAddressBinder(EventLoopGroup loopGroup, String host, int port,
       ConnectionAcceptInitializer acceptInitializer, List<FrameDataReceiver> frameReceivers,
-      Object bindParam) {
+      NetDisconnectListener disconnectListener, Object bindParam) {
     _loopGroup = loopGroup;
     _host = host;
     _port = port;
     _acceptInitializer = acceptInitializer;
     _frameReceivers = frameReceivers;
+    _disconnectListener = disconnectListener;
     _bindParam = bindParam;
   }
 
@@ -41,10 +43,12 @@ public class ServerAddressBinder {
 
   private NettyServerHandlerV2 createNettyHandler(SocketChannel channel) {
     NettyServerHandlerV2 handler = new NettyServerHandlerV2();
+    handler._receiveState = new FrameReceiveStateFactory(_frameReceivers).create();
+    handler._disconnectListener = _disconnectListener;
+
     handler._connState = new AcceptInitInvoker(
         _acceptInitializer, channel, _host, _port, _bindParam).invoke();
 
-    handler._receiveState = new FrameReceiveStateFactory(_frameReceivers).create();
     return handler;
   }
 
@@ -54,6 +58,7 @@ public class ServerAddressBinder {
 
   private final ConnectionAcceptInitializer _acceptInitializer;
   private final List<FrameDataReceiver> _frameReceivers;
+  private final NetDisconnectListener _disconnectListener;
 
   private final Object _bindParam;
 }

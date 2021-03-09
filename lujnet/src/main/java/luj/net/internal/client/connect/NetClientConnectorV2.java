@@ -2,6 +2,7 @@ package luj.net.internal.client.connect;
 
 import com.google.common.collect.ImmutableList;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -51,13 +52,23 @@ public class NetClientConnectorV2 {
       }
     });
 
-    ChannelFuture result = bootstrap.connect(conf._host, conf._port);
-    result.syncUninterruptibly();
+    //TODO: 改成异步的，connectListener
+    Channel channel = connectImpl(bootstrap, conf);
 
-    NetConnection conn = new NetConnFactory(result.channel(), null).create();
+    NetConnection conn = new NetConnFactory(channel, null).create();
     nettyHandler._lujnetConn = conn;
 
     return conn;
+  }
+
+  private Channel connectImpl(Bootstrap bootstrap, ConfigImpl conf) {
+    ChannelFuture result = bootstrap.connect(conf._host, conf._port);
+    result.awaitUninterruptibly();
+
+    if (result.isSuccess()) {
+      return result.channel();
+    }
+    return null;
   }
 
   private final Consumer<NetConnection.Config> _configFiller;

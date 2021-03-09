@@ -34,8 +34,8 @@ public enum FrameReceiveInvoker {
     int waitBytes = result._byteCountToWait;
     FrameDataReceiver nextRecv = result._nextReceiver;
 
-    LOG.debug("当前：{}，等：{}，下一个：{}", curReceiver.getClass().getSimpleName(),
-        waitBytes, nextRecv.getClass().getSimpleName());
+//    LOG.debug("当前：{}，等：{}，下一个：{}", curReceiver.getClass().getSimpleName(),
+//        waitBytes, nextRecv.getClass().getSimpleName());
 
     receiveState.setByteCountToWait(waitBytes);
     receiveState.setNextReceiver(nextRecv);

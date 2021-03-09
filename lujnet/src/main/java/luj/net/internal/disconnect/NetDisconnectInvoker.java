@@ -3,9 +3,13 @@ package luj.net.internal.disconnect;
 import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetDisconnectListener;
 
-public class NetDisconnInvoker {
+/**
+ * @see NetDisconnectInvokerV2
+ */
+@Deprecated
+public class NetDisconnectInvoker {
 
-  public NetDisconnInvoker(NetDisconnectListener disconnectListener, NetConnection conn) {
+  public NetDisconnectInvoker(NetDisconnectListener disconnectListener, NetConnection conn) {
     _disconnectListener = disconnectListener;
     _conn = conn;
   }

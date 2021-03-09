@@ -3,6 +3,8 @@ package luj.net.internal.server.bind;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import luj.net.api.connection.NetDisconnectListener;
+import luj.net.internal.disconnect.NetDisconnectInvokerV2;
 import luj.net.internal.receive.frame.FrameReceiveInvoker;
 import luj.net.internal.receive.init.FrameReceiveState;
 import luj.net.internal.receive.read.ReceiveChannelReader;
@@ -23,6 +25,11 @@ final class NettyServerHandlerV2 extends ChannelInboundHandlerAdapter {
   }
 
   @Override
+  public void channelInactive(ChannelHandlerContext ctx) {
+    NetDisconnectInvokerV2.GET.invoke(_disconnectListener, _connState);
+  }
+
+  @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
     LOG.error(cause.getMessage(), cause);
   }
@@ -30,5 +37,7 @@ final class NettyServerHandlerV2 extends ChannelInboundHandlerAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(NettyServerHandlerV2.class);
 
   FrameReceiveState _receiveState;
+  NetDisconnectListener _disconnectListener;
+
   Object _connState;
 }

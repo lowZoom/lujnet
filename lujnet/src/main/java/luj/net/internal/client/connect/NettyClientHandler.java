@@ -6,7 +6,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.server.FrameDataReceiver;
-import luj.net.internal.disconnect.NetDisconnInvoker;
+import luj.net.internal.disconnect.NetDisconnectInvokerV2;
 import luj.net.internal.receive.init.FrameReceiveState;
 import luj.net.internal.receive.read.ReceiveChannelReader;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelInactive(ChannelHandlerContext ctx) {
-    new NetDisconnInvoker(_disconnectListener, _lujnetConn).invoke();
+    NetDisconnectInvokerV2.GET.invoke(_disconnectListener, null);
   }
 
   @Override
