@@ -55,10 +55,12 @@ public enum ReceiveChannelReader {
 
   private void callDecode(ChannelHandlerContext ctx, ByteBuf in, FrameReceiveState state,
       Object bindParam) throws Exception {
+//    LOG.debug("总收到{}：{}", state.getNextReceiver(), in.readableBytes());
+
     while (in.isReadable()) {
       int oldInputLength = in.readableBytes();
       checkState(oldInputLength > 0);
-      decode(in, state, bindParam);
+      boolean handled = decode(in, state, bindParam);
 
       // Check if this handler was removed before continuing the loop.
       // If it was removed, it is not safe to continue to operate on the buffer.
@@ -66,6 +68,13 @@ public enum ReceiveChannelReader {
       // See https://github.com/netty/netty/issues/1664
       if (ctx.isRemoved()) {
         break;
+      }
+
+      if (!handled) {
+        if (oldInputLength == in.readableBytes()) {
+          break;
+        }
+        continue;
       }
 
       if (oldInputLength == in.readableBytes()) {
@@ -91,11 +100,11 @@ public enum ReceiveChannelReader {
   /**
    * @see io.netty.handler.codec.LengthFieldBasedFrameDecoder#decode(ChannelHandlerContext, ByteBuf)
    */
-  private void decode(ByteBuf in, FrameReceiveState state, Object bindParam) throws Exception {
+  private boolean decode(ByteBuf in, FrameReceiveState state, Object bindParam) throws Exception {
     int readableBytes = in.readableBytes();
     int bytesToWait = state.getByteCountToWait();
     if (readableBytes < bytesToWait) {
-      return;
+      return false;
     }
 
     int readerIndex = in.readerIndex();
@@ -104,10 +113,15 @@ public enum ReceiveChannelReader {
     ByteBuf frame = extractFrame(in, readerIndex, actualFrameLength);
     in.readerIndex(readerIndex + actualFrameLength);
 
+//    LOG.debug("一帧{}：{}", state.getNextReceiver(), actualFrameLength);
     FrameReceiveInvoker.GET.invoke(frame, state, bindParam);
+
+    return true;
   }
 
   private ByteBuf extractFrame(ByteBuf buffer, int index, int length) {
     return buffer.retainedSlice(index, length);
   }
+
+//  private static final Logger LOG = LoggerFactory.getLogger(ReceiveChannelReader.class);
 }

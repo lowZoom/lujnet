@@ -7,12 +7,19 @@ import luj.net.api.client.NetConnection;
 import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.disconnect.NetDisconnectInvokerV2;
+import luj.net.internal.receive.frame.FrameReceiveInvoker;
 import luj.net.internal.receive.init.FrameReceiveState;
 import luj.net.internal.receive.read.ReceiveChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 final class NettyClientHandler extends ChannelInboundHandlerAdapter {
+
+  @Override
+  public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    // 先触发第一个接收器
+    FrameReceiveInvoker.GET.invoke(null, _receiveState, null);
+  }
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
