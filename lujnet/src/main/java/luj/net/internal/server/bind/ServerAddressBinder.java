@@ -2,6 +2,7 @@ package luj.net.internal.server.bind;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -31,6 +32,7 @@ public class ServerAddressBinder {
     bootstrap.channel(NioServerSocketChannel.class);
     bootstrap.group(_loopGroup);
 
+    bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
     bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) {
