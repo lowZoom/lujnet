@@ -7,6 +7,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
+import io.netty.util.ReferenceCountUtil;
 import io.netty.util.internal.StringUtil;
 import luj.net.internal.receive.frame.FrameReceiveInvoker;
 import luj.net.internal.receive.init.FrameReceiveState;
@@ -113,8 +114,13 @@ public enum ReceiveChannelReader {
     ByteBuf frame = extractFrame(in, readerIndex, actualFrameLength);
     in.readerIndex(readerIndex + actualFrameLength);
 
+    try {
 //    LOG.debug("一帧{}：{}", state.getNextReceiver(), actualFrameLength);
-    FrameReceiveInvoker.GET.invoke(frame, state, bindParam);
+      FrameReceiveInvoker.GET.invoke(frame, state, bindParam);
+
+    } finally {
+      ReferenceCountUtil.release(frame);
+    }
 
     return true;
   }
