@@ -115,7 +115,7 @@ public enum ReceiveChannelReader {
     in.readerIndex(readerIndex + actualFrameLength);
 
     try {
-//    LOG.debug("一帧{}：{}", state.getNextReceiver(), actualFrameLength);
+//      LOG.debug("一帧{}：{}", state.getNextReceiver(), actualFrameLength);
       FrameReceiveInvoker.GET.invoke(frame, state, bindParam);
 
     } finally {

@@ -28,5 +28,10 @@ final class ConnectionImpl implements ConnectionAcceptInitializer.Connection {
     return AddressImpl.from(addr);
   }
 
+  @Override
+  public String toString() {
+    return _channel.toString();
+  }
+
   SocketChannel _channel;
 }
