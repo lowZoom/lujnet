@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 已弃用，有泄漏BUG
+ *
  * @see luj.net.internal.server.bind.NettyServerHandlerV2
  */
 @Deprecated
@@ -23,9 +25,15 @@ final class NettyServerHandler extends ChannelInboundHandlerAdapter {
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     NetConnection conn = new NetConnFactory(ctx.channel(), null).create();
-    ReceiveContextImpl receiveCtx = new ReceiveContextImpl((ByteBuf) msg, _applicationParam, conn);
+    ByteBuf buf = (ByteBuf) msg;
 
+//    try {
+    ReceiveContextImpl receiveCtx = new ReceiveContextImpl(buf, _applicationParam, conn);
     _receiveListener.onReceive(receiveCtx);
+//
+//    } finally {
+//      ReferenceCountUtil.release(buf);
+//    }
   }
 
   @Override

@@ -2,7 +2,6 @@ package luj.net.internal.connection;
 
 import static com.google.common.base.Preconditions.checkState;
 
-import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -23,6 +22,10 @@ final class ConnectionImpl implements NetConnection {
   @Override
   public void send(ByteBuf data) {
     checkState(!isClosed());
+
+//    int ref = data.refCnt();
+//    checkState(ref == 1, ref);
+
     _channel.writeAndFlush(data);
   }
 
