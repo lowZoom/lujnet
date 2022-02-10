@@ -13,10 +13,14 @@ import luj.net.internal.receive.read.ReceiveChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    _active = true;
+
     // 先触发第一个接收器
     FrameReceiveInvoker.GET.invoke(null, _receiveState, null);
   }
@@ -28,6 +32,12 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelInactive(ChannelHandlerContext ctx) {
+    if (!_active) {
+      // 连上过才会触发断连
+      return;
+    }
+
+    _active = false;
     NetDisconnectInvokerV2.GET.invoke(_disconnectListener, null);
   }
 
@@ -38,8 +48,8 @@ final class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(NettyClientHandler.class);
 
+  boolean _active;
   FrameReceiveState _receiveState;
-  NetConnection _lujnetConn;
 
   FrameDataReceiver _frameReceiver;
   NetDisconnectListener _disconnectListener;

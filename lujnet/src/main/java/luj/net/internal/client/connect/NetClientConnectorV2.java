@@ -9,21 +9,29 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import java.util.function.Consumer;
 import luj.net.api.client.NetConnection;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.connection.NetConnFactory;
 import luj.net.internal.receive.init.FrameReceiveStateFactory;
 
+import java.util.function.Consumer;
+
 public class NetClientConnectorV2 {
 
-  public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller,
-      NioEventLoopGroup workGroup) {
+  public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller, NioEventLoopGroup workGroup) {
     _configFiller = configFiller;
     _workGroup = workGroup;
   }
 
   public NetConnection connect() {
+    ChannelFuture result = connect2();
+    result.awaitUninterruptibly();
+
+    Channel channel = result.isSuccess() ? result.channel() : null;
+    return new NetConnFactory(channel, null).create();
+  }
+
+  public ChannelFuture connect2() {
     ConfigImpl conf = new ConfigImpl();
     _configFiller.accept(conf);
 
@@ -38,13 +46,14 @@ public class NetClientConnectorV2 {
     }
 
     NettyClientHandler nettyHandler = new NettyClientHandler();
+    nettyHandler._active = false;
     nettyHandler._disconnectListener = conf._disconnectListener;
 
     FrameDataReceiver frameReceiver = conf._frameReceiver;
     nettyHandler._frameReceiver = frameReceiver;
 
     nettyHandler._receiveState = new FrameReceiveStateFactory(
-        frameReceiver == null ? ImmutableList.of() : ImmutableList.of(frameReceiver)).create();
+        (frameReceiver == null) ? ImmutableList.of() : ImmutableList.of(frameReceiver)).create();
 
     bootstrap.handler(new ChannelInitializer<SocketChannel>() {
       @Override
@@ -53,23 +62,7 @@ public class NetClientConnectorV2 {
       }
     });
 
-    //TODO: 改成异步的，connectListener
-    Channel channel = connectImpl(bootstrap, conf);
-
-    NetConnection conn = new NetConnFactory(channel, null).create();
-    nettyHandler._lujnetConn = conn;
-
-    return conn;
-  }
-
-  private Channel connectImpl(Bootstrap bootstrap, ConfigImpl conf) {
-    ChannelFuture result = bootstrap.connect(conf._host, conf._port);
-    result.awaitUninterruptibly();
-
-    if (result.isSuccess()) {
-      return result.channel();
-    }
-    return null;
+    return bootstrap.connect(conf._host, conf._port);
   }
 
   private final Consumer<NetConnection.Config> _configFiller;

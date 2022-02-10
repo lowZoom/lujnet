@@ -16,7 +16,7 @@ final class ConnectionImpl implements NetConnection {
 
   @Override
   public void send(byte[] data) {
-    send(Unpooled.wrappedBuffer(data));
+    send(_channel.alloc().buffer(data.length).writeBytes(data));
   }
 
   @Override

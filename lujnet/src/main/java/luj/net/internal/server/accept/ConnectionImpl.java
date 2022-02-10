@@ -1,11 +1,17 @@
 package luj.net.internal.server.accept;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.socket.SocketChannel;
 import java.net.InetSocketAddress;
 import luj.net.api.server.ConnectionAcceptInitializer;
 
 final class ConnectionImpl implements ConnectionAcceptInitializer.Connection {
+
+  @Override
+  public ByteBufAllocator alloc() {
+    return _channel.alloc();
+  }
 
   @Override
   public void write(ByteBuf data) {

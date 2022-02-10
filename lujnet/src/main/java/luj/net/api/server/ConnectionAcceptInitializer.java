@@ -1,6 +1,8 @@
 package luj.net.api.server;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.channel.ChannelId;
 
 public interface ConnectionAcceptInitializer {
 
@@ -14,6 +16,8 @@ public interface ConnectionAcceptInitializer {
   }
 
   interface Connection {
+
+    ByteBufAllocator alloc();
 
     void write(ByteBuf data);
 
