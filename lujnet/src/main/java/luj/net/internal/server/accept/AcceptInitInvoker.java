@@ -14,7 +14,7 @@ public class AcceptInitInvoker {
     _bindParam = bindParam;
   }
 
-  public Object invoke() {
+  public Object invoke() throws Exception {
     ContextImpl ctx = new ContextImpl();
     ctx._bindParam = _bindParam;
 

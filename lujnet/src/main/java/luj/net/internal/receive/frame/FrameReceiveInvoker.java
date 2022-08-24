@@ -1,6 +1,7 @@
 package luj.net.internal.receive.frame;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.receive.init.FrameReceiveState;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public enum FrameReceiveInvoker {
     }
 
     RecvContextImpl ctx = new RecvContextImpl();
-    ctx._lastFrame = frameBuf;
+    ctx._lastFrame = (frameBuf == null) ? Unpooled.EMPTY_BUFFER : frameBuf;
     ctx._connectionState = connState;
 
     RecvResultImpl result = new RecvResultImpl();

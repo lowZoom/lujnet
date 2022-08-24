@@ -35,12 +35,7 @@ public class NetClientConnectorV2 {
     ConfigImpl conf = new ConfigImpl();
     _configFiller.accept(conf);
 
-    Bootstrap bootstrap = new Bootstrap()
-        .group(_workGroup)
-        .channel(NioSocketChannel.class)
-        .option(ChannelOption.SO_KEEPALIVE, true)
-        .option(ChannelOption.TCP_NODELAY, true);
-
+    Bootstrap bootstrap = new ClientBootstrapMaker(_workGroup).make();
     if (conf._connectTimeout > 0) {
       bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, conf._connectTimeout);
     }
