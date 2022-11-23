@@ -5,9 +5,9 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class ClientBootstrapMaker {
+public class ClientBootMaker {
 
-  public ClientBootstrapMaker(EventLoopGroup workGroup) {
+  public ClientBootMaker(EventLoopGroup workGroup) {
     _workGroup = workGroup;
   }
 

@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 public interface FrameDataReceiver {
 
+  @Deprecated
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.RUNTIME)
   @interface Head {

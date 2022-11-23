@@ -8,7 +8,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import luj.net.api.client.NetConnection;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.connection.NetConnFactory;
@@ -35,7 +34,7 @@ public class NetClientConnectorV2 {
     ConfigImpl conf = new ConfigImpl();
     _configFiller.accept(conf);
 
-    Bootstrap bootstrap = new ClientBootstrapMaker(_workGroup).make();
+    Bootstrap bootstrap = new ClientBootMaker(_workGroup).make();
     if (conf._connectTimeout > 0) {
       bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, conf._connectTimeout);
     }

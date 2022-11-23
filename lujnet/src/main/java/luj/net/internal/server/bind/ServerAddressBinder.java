@@ -25,7 +25,7 @@ public class ServerAddressBinder {
   }
 
   public void bind() {
-    ServerBootstrap bootstrap = new DefaultBootstrapMaker(_loopGroup, _loopGroup).make();
+    ServerBootstrap bootstrap = new ServerBootMaker(_loopGroup, _loopGroup).make();
 
     bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
       @Override

@@ -3,6 +3,7 @@ package luj.net.api.server;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelId;
+import io.netty.channel.socket.SocketChannel;
 
 public interface ConnectionAcceptInitializer {
 
@@ -25,6 +26,8 @@ public interface ConnectionAcceptInitializer {
 
     void close();
 
+//    ChannelId getId();
+
     Address getRemoteAddress();
   }
 
@@ -35,5 +38,5 @@ public interface ConnectionAcceptInitializer {
     int port();
   }
 
-  Object init(Context ctx);
+  Object init(Context ctx) throws Exception;
 }
