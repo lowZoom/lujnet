@@ -5,11 +5,10 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.AbstractFuture;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import java.util.concurrent.TimeUnit;
 import luj.net.api.client.ConnectionFactory;
 import luj.net.api.client.NetConnection;
 import luj.net.internal.connection.NetConnFactory;
-
-import java.util.concurrent.TimeUnit;
 
 final class FutureImpl extends AbstractFuture<NetConnection> implements ConnectionFactory.ConnectFuture {
 
@@ -24,7 +23,7 @@ final class FutureImpl extends AbstractFuture<NetConnection> implements Connecti
     _nettyFuture.addListener(new ChannelFutureListener() {
       @Override
       public void operationComplete(ChannelFuture future) throws Exception {
-        _result = new NetConnFactory(future.channel(), null).create();
+        _result = new NetConnFactory(future.channel()).create();
         ((GenericFutureListener<FutureImpl>) listener).operationComplete(FutureImpl.this);
       }
     });

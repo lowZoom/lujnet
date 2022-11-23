@@ -2,7 +2,6 @@ package luj.net.api.client;
 
 import io.netty.buffer.ByteBuf;
 import luj.net.api.connection.NetDisconnectListener;
-import luj.net.api.connection.NetReceiveListener;
 import luj.net.api.server.FrameDataReceiver;
 
 public interface NetConnection {
@@ -14,9 +13,6 @@ public interface NetConnection {
     Config port(int port);
 
     Config connectTimeoutMillis(int timeoutMs);
-
-    @Deprecated
-    Config receiveListener(NetReceiveListener listener);
 
     Config frameReceiver(FrameDataReceiver receiver);
 
@@ -30,10 +26,4 @@ public interface NetConnection {
   void close();
 
   boolean isClosed();
-
-  /**
-   * @see NetReceiveListener.Context#getApplicationParam
-   */
-  @Deprecated
-  <T> T getApplicationParam();
 }

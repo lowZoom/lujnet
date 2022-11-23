@@ -5,16 +5,16 @@ import luj.net.api.client.NetConnection;
 
 public class NetConnFactory {
 
-  public NetConnFactory(Channel channel, Object connParam) {
+  public NetConnFactory(Channel channel) {
     _channel = channel;
-    _connParam = connParam;
   }
 
   public NetConnection create() {
-    return new ConnectionImpl(_channel, _connParam);
+    var conn = new ConnectionImpl();
+    conn._channel = _channel;
+
+    return conn;
   }
 
   private final Channel _channel;
-
-  private final Object _connParam;
 }

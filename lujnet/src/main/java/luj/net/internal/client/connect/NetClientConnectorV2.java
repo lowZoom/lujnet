@@ -8,16 +8,16 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import java.util.function.Consumer;
 import luj.net.api.client.NetConnection;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.connection.NetConnFactory;
 import luj.net.internal.receive.init.FrameReceiveStateFactory;
 
-import java.util.function.Consumer;
-
 public class NetClientConnectorV2 {
 
-  public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller, NioEventLoopGroup workGroup) {
+  public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller,
+      NioEventLoopGroup workGroup) {
     _configFiller = configFiller;
     _workGroup = workGroup;
   }
@@ -27,7 +27,7 @@ public class NetClientConnectorV2 {
     result.awaitUninterruptibly();
 
     Channel channel = result.isSuccess() ? result.channel() : null;
-    return new NetConnFactory(channel, null).create();
+    return new NetConnFactory(channel).create();
   }
 
   public ChannelFuture connect2() {

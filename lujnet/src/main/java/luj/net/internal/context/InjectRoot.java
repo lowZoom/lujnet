@@ -3,7 +3,6 @@ package luj.net.internal.context;
 import java.util.List;
 import luj.ava.spring.Internal;
 import luj.net.api.connection.NetDisconnectListener;
-import luj.net.api.connection.NetReceiveListener;
 import luj.net.api.server.ConnectionAcceptInitializer;
 import luj.net.api.server.FrameDataReceiver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,6 @@ final class InjectRoot {
     return _frameReceivers;
   }
 
-  public NetReceiveListener getReceiveListener() {
-    return _receiveListener;
-  }
-
   public NetDisconnectListener getDisconnectListener() {
     return _disconnectListener;
   }
@@ -33,13 +28,7 @@ final class InjectRoot {
   @Autowired(required = false)
   private List<FrameDataReceiver> _frameReceivers;
 
-  //FIXME: 建立连接的时候单独传
-  @Deprecated
-  @Autowired(required = false)
-  private NetReceiveListener _receiveListener;
-
-  //FIXME: 建立连接的时候单独传
-  @Deprecated
+  @Deprecated //FIXME: 建立连接的时候单独传
   @Autowired(required = false)
   private NetDisconnectListener _disconnectListener;
 }

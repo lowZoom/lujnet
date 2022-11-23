@@ -6,23 +6,15 @@ import luj.net.api.NetContext;
 import luj.net.api.client.ConnectionFactory;
 import luj.net.api.client.NetConnection;
 import luj.net.api.server.NetServer;
-import luj.net.internal.client.NetClientConnector;
 import luj.net.internal.client.connect.NetClientConnectorV2;
 import luj.net.internal.client.factory.ConnFactoryImpl;
 import luj.net.internal.server.NetServerFactory;
-import luj.net.internal.server.NetServerStarter;
 
 final class NetContextImpl implements NetContext {
 
   NetContextImpl(InjectRoot injectRoot, NioEventLoopGroup workGroup) {
     _injectRoot = injectRoot;
     _workGroup = workGroup;
-  }
-
-  @Override
-  public NetConnection createConnection(String host, int port, Object param) {
-    return new NetClientConnector(host, port, _workGroup, _injectRoot.getReceiveListener(),
-        _injectRoot.getDisconnectListener(), param).connect();
   }
 
   @Override
@@ -33,11 +25,6 @@ final class NetContextImpl implements NetContext {
   @Override
   public ConnectionFactory createConnectionFactory() {
     return new ConnFactoryImpl(new NioEventLoopGroup());
-  }
-
-  @Override
-  public void createServer(String host, int port, Object param) {
-    new NetServerStarter(host, port, param, _injectRoot.getReceiveListener()).start();
   }
 
   @Override
