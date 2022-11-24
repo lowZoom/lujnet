@@ -8,6 +8,9 @@ public interface ConnectionFactory {
 
   interface ConnectFuture extends Future<NetConnection> {
 
+    /**
+     * @see ConnectFutureListener
+     */
     @Override
     ConnectFuture addListener(
         GenericFutureListener<? extends Future<? super NetConnection>> listener);
