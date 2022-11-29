@@ -10,6 +10,7 @@ import luj.net.api.client.ConnectionFactory;
 import luj.net.api.client.NetConnection;
 import luj.net.internal.connection.NetConnFactory;
 
+@Deprecated
 final class FutureImpl extends AbstractFuture<NetConnection> implements ConnectionFactory.ConnectFuture {
 
   @Override

@@ -1,11 +1,15 @@
 package luj.net.internal.server.accept;
 
 import io.netty.channel.socket.SocketChannel;
-import luj.net.api.server.ConnectionAcceptInitializer;
+import luj.net.api.server.ServerAcceptInit;
 
+/**
+ * @see AcceptInitInvokerV2
+ */
+@Deprecated
 public class AcceptInitInvoker {
 
-  public AcceptInitInvoker(ConnectionAcceptInitializer initializer, SocketChannel channel,
+  public AcceptInitInvoker(ServerAcceptInit initializer, SocketChannel channel,
       String bindHost, int bindPort, Object bindParam) {
     _initializer = initializer;
     _channel = channel;
@@ -27,10 +31,11 @@ public class AcceptInitInvoker {
     bindAddr._host = _bindHost;
     bindAddr._port = _bindPort;
 
-    return _initializer.init(ctx);
+    _initializer.onInit(ctx);
+    return null;
   }
 
-  private final ConnectionAcceptInitializer _initializer;
+  private final ServerAcceptInit _initializer;
   private final SocketChannel _channel;
 
   private final String _bindHost;

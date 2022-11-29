@@ -1,16 +1,17 @@
 package luj.net.internal.context;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import luj.ava.spring.Internal;
 import luj.net.api.connection.NetDisconnectListener;
-import luj.net.api.server.ConnectionAcceptInitializer;
 import luj.net.api.server.FrameDataReceiver;
+import luj.net.api.server.ServerAcceptInit;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Internal
 final class InjectRoot {
 
-  public ConnectionAcceptInitializer getAcceptInitializer() {
+  public ServerAcceptInit getAcceptInitializer() {
     return _acceptInitializer;
   }
 
@@ -23,10 +24,10 @@ final class InjectRoot {
   }
 
   @Autowired(required = false)
-  private ConnectionAcceptInitializer _acceptInitializer;
+  private ServerAcceptInit _acceptInitializer;
 
   @Autowired(required = false)
-  private List<FrameDataReceiver> _frameReceivers;
+  List<FrameDataReceiver> _frameReceivers = ImmutableList.of();
 
   @Deprecated //FIXME: 建立连接的时候单独传
   @Autowired(required = false)

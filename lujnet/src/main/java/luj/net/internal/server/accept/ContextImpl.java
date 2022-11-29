@@ -1,17 +1,23 @@
 package luj.net.internal.server.accept;
 
-import luj.net.api.server.ConnectionAcceptInitializer;
+import io.netty.channel.socket.SocketChannel;
+import luj.net.api.server.ServerAcceptInit;
 
-final class ContextImpl implements ConnectionAcceptInitializer.Context {
+final class ContextImpl implements ServerAcceptInit.Context {
 
   @Override
-  public ConnectionAcceptInitializer.Connection getConnection() {
+  public ServerAcceptInit.Connection getConnection() {
     return _conn;
   }
 
   @Override
-  public ConnectionAcceptInitializer.Address getBindAddress() {
+  public ServerAcceptInit.Address getBindAddress() {
     return _bindAddr;
+  }
+
+  @Override
+  public SocketChannel getChannel() {
+    return _channel;
   }
 
   @SuppressWarnings("unchecked")
@@ -20,8 +26,11 @@ final class ContextImpl implements ConnectionAcceptInitializer.Context {
     return (T) _bindParam;
   }
 
+  @Deprecated
   ConnectionImpl _conn;
+  @Deprecated
   AddressImpl _bindAddr;
 
+  SocketChannel _channel;
   Object _bindParam;
 }

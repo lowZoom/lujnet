@@ -1,5 +1,6 @@
 package luj.net.internal.client.factory;
 
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.nio.NioEventLoopGroup;
 import java.util.function.Consumer;
 import luj.net.api.client.ConnectionFactory;
@@ -13,7 +14,7 @@ public class ConnFactoryImpl implements ConnectionFactory {
   }
 
   @Override
-  public ConnectFuture connect(Consumer<NetConnection.Config> config) {
+  public ChannelFuture connect(Consumer<NetConnection.Config> config) {
     return new NetClientConnectorV3(config, _workGroup).connect();
   }
 

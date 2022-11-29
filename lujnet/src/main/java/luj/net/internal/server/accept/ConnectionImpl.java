@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.socket.SocketChannel;
 import java.net.InetSocketAddress;
-import luj.net.api.server.ConnectionAcceptInitializer;
+import luj.net.api.server.ServerAcceptInit;
 
-final class ConnectionImpl implements ConnectionAcceptInitializer.Connection {
+final class ConnectionImpl implements ServerAcceptInit.Connection {
 
   @Override
   public ByteBufAllocator alloc() {
@@ -29,7 +29,7 @@ final class ConnectionImpl implements ConnectionAcceptInitializer.Connection {
   }
 
   @Override
-  public ConnectionAcceptInitializer.Address getRemoteAddress() {
+  public ServerAcceptInit.Address getRemoteAddress() {
     InetSocketAddress addr = _channel.remoteAddress();
     return AddressImpl.from(addr);
   }

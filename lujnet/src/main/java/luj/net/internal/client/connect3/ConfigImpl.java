@@ -1,4 +1,4 @@
-package luj.net.internal.client.connect;
+package luj.net.internal.client.connect3;
 
 import java.util.function.Consumer;
 import luj.net.api.client.NetConnection;
@@ -27,7 +27,8 @@ final class ConfigImpl implements NetConnection.Config {
 
   @Override
   public NetConnection.Config listener(Consumer<NetConnection.Listener> val) {
-    throw new UnsupportedOperationException("该类已废弃");
+    val.accept(_listener);
+    return this;
   }
 
   @Override
@@ -46,6 +47,10 @@ final class ConfigImpl implements NetConnection.Config {
   int _port;
   int _connectTimeout;
 
+  CListenerImpl _listener = new CListenerImpl();
+
+  @Deprecated
   FrameDataReceiver _frameReceiver;
+  @Deprecated
   NetDisconnectListener _disconnectListener;
 }

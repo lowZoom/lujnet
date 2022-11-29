@@ -8,16 +8,11 @@ import java.util.List;
 import luj.net.api.connection.NetDisconnectListener;
 import luj.net.api.server.FrameDataReceiver;
 import luj.net.api.server.ServerAcceptInit;
-import luj.net.internal.receive.init.FrameReceiveStateFactory;
-import luj.net.internal.server.accept.AcceptInitInvoker;
+import luj.net.internal.server.accept.AcceptInitInvokerV2;
 
-/**
- * @see ServerAddressBinderV2
- */
-@Deprecated
-public class ServerAddressBinder {
+public class ServerAddressBinderV2 {
 
-  public ServerAddressBinder(EventLoopGroup loopGroup, String host, int port, ServerAcceptInit acceptInitializer, List<FrameDataReceiver> frameReceivers, NetDisconnectListener disconnectListener, Object bindParam) {
+  public ServerAddressBinderV2(EventLoopGroup loopGroup, String host, int port, ServerAcceptInit acceptInitializer, List<FrameDataReceiver> frameReceivers, NetDisconnectListener disconnectListener, Object bindParam) {
     _loopGroup = loopGroup;
     _host = host;
     _port = port;
@@ -33,22 +28,11 @@ public class ServerAddressBinder {
     bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
       @Override
       protected void initChannel(SocketChannel ch) throws Exception {
-        ch.pipeline().addLast(createNettyHandler(ch));
+        new AcceptInitInvokerV2(_acceptInitializer, ch, _bindParam).invoke();
       }
     });
 
     bootstrap.bind(_host, _port);
-  }
-
-  private NettyServerHandlerV2 createNettyHandler(SocketChannel channel) throws Exception {
-    NettyServerHandlerV2 handler = new NettyServerHandlerV2();
-    handler._receiveState = new FrameReceiveStateFactory(_frameReceivers).create();
-    handler._disconnectListener = _disconnectListener;
-
-    handler._connState = new AcceptInitInvoker(
-        _acceptInitializer, channel, _host, _port, _bindParam).invoke();
-
-    return handler;
   }
 
   private final EventLoopGroup _loopGroup;

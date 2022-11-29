@@ -1,11 +1,13 @@
 package luj.net.api.client;
 
+import io.netty.channel.ChannelFuture;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.util.function.Consumer;
 
 public interface ConnectionFactory {
 
+  @Deprecated
   interface ConnectFuture extends Future<NetConnection> {
 
     /**
@@ -16,11 +18,12 @@ public interface ConnectionFactory {
         GenericFutureListener<? extends Future<? super NetConnection>> listener);
   }
 
+  @Deprecated
   interface ConnectFutureListener extends GenericFutureListener<ConnectFuture> {
     // NOOP
   }
 
-  ConnectFuture connect(Consumer<NetConnection.Config> config);
+  ChannelFuture connect(Consumer<NetConnection.Config> config);
 
   //TODO: ConnectionPool
 }

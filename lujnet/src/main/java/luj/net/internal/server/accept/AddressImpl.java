@@ -1,9 +1,9 @@
 package luj.net.internal.server.accept;
 
 import java.net.InetSocketAddress;
-import luj.net.api.server.ConnectionAcceptInitializer;
+import luj.net.api.server.ServerAcceptInit;
 
-final class AddressImpl implements ConnectionAcceptInitializer.Address {
+final class AddressImpl implements ServerAcceptInit.Address {
 
   static AddressImpl from(InetSocketAddress addr) {
     AddressImpl result = new AddressImpl();

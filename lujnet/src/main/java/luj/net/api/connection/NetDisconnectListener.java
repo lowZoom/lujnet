@@ -1,5 +1,6 @@
 package luj.net.api.connection;
 
+@Deprecated
 public interface NetDisconnectListener {
 
   interface Context {

@@ -14,6 +14,10 @@ import luj.net.api.server.FrameDataReceiver;
 import luj.net.internal.connection.NetConnFactory;
 import luj.net.internal.receive.init.FrameReceiveStateFactory;
 
+/**
+ * @see luj.net.internal.client.connect3.NetClientConnectorV3
+ */
+@Deprecated
 public class NetClientConnectorV2 {
 
   public NetClientConnectorV2(Consumer<NetConnection.Config> configFiller,
