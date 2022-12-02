@@ -11,6 +11,7 @@ import luj.net.internal.receive.read.ReceiveChannelReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 final class NettyServerHandlerV2 extends ChannelInboundHandlerAdapter {
 
   @Override

@@ -6,16 +6,6 @@ import luj.net.api.server.ServerAcceptInit;
 final class ContextImpl implements ServerAcceptInit.Context {
 
   @Override
-  public ServerAcceptInit.Connection getConnection() {
-    return _conn;
-  }
-
-  @Override
-  public ServerAcceptInit.Address getBindAddress() {
-    return _bindAddr;
-  }
-
-  @Override
   public SocketChannel getChannel() {
     return _channel;
   }
@@ -26,11 +16,7 @@ final class ContextImpl implements ServerAcceptInit.Context {
     return (T) _bindParam;
   }
 
-  @Deprecated
-  ConnectionImpl _conn;
-  @Deprecated
-  AddressImpl _bindAddr;
-
   SocketChannel _channel;
+
   Object _bindParam;
 }
